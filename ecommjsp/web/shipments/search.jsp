@@ -6,12 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.sql.*"%>
-<%@page import="dbShipmentUtility.*"%>
-<%@page errorPage = "errorPage.jsp" %>
-<jsp:useBean id="item" class="dbShipmentUtility.Item" scope = "request" />
-<jsp:useBean id="cart" class="dbShipmentUtility.ShoppingCart" scope ="session" />
-<jsp:setProperty name="item" property="*" />
-
 
 <!DOCTYPE html>
 <html>
@@ -49,35 +43,42 @@
             <div class="row">
 
 <%
-Integer shoppingCart_ItemCount = new Integer(0);
-session.setAttribute("count", shoppingCart_ItemCount);
+String productName="";
 
-//
+if(request.getParameter("productName") != null){
+    productName = request.getParameter("productName");
+    productName=productName.toLowerCase();
+}
+
+
+
+
+     //
 // database work
 //
 try{
-  // JDBC driver name and database URL
-   String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-   String DB_URL = "jdbc:mysql://localhost/Ecommerce";
+// JDBC driver name and database URL
+ String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+ String DB_URL = "jdbc:mysql://localhost/Ecommerce";
 
-  //  Database credentials
-   final String USER = "root";
-   final String PASS = "";
- // open a connection
-  Connection conn = null;
-  Class.forName("com.mysql.jdbc.Driver");  // load the driver
-  System.out.println("Connecting to database...");
-  conn = DriverManager.getConnection(DB_URL,USER,PASS);
+//  Database credentials
+ final String USER = "root";
+ final String PASS = "";
+// open a connection
+Connection conn = null;
+Class.forName("com.mysql.jdbc.Driver");  // load the driver
+System.out.println("Connecting to database...");
+conn = DriverManager.getConnection(DB_URL,USER,PASS);
 // create the sql command
 System.out.println("Creating statement...");
 
-  PreparedStatement prep = conn.prepareStatement("Select * from products_t");
+PreparedStatement prep = conn.prepareStatement("Select * from products_t WHERE product_name=?");
+prep.setString(1,productName);
 
-  ResultSet rs = prep.executeQuery();
+ResultSet rs = prep.executeQuery();
   // process results one row at a timne
   while(rs.next())
   {
-
 
 %>
 
@@ -89,17 +90,11 @@ System.out.println("Creating statement...");
                           <%out.println("<p>"+rs.getString(3)+"</p>");%>
                               <div class="row">
                                   <div class="col">
-                                        <%out.println("<p class='btn btn-danger btn-block'>"+rs.getString(4)+"$"+"</p>");%>
+                                  <%out.println("<p class='btn btn-danger btn-block'>"+rs.getString(4)+"$"+"</p>");%>
                                   </div>
                                   <div class="col">
-                                      <%
-                                      String name =rs.getString(2);
-                                      name = java.net.URLEncoder.encode(name, "UTF-8");  // fix name into a url ok
-                                      String price=rs.getString(4);
-                                       %>
+                                      <a href="#" class="btn btn-success btn-block">Add to cart</a>
 
-                                       <%out.println("<a class='btn btn-success btn-block add' href='index.jsp?id="+rs.getString(1)+"&name="+name+"&quantity=1&price="+price+
-                                                    "'>Add to cart</a>");%>
                                   </div>
                               </div>
                           </div>
@@ -123,25 +118,6 @@ System.out.println("Creating statement...");
 
 %>
 
-<%
- //
- // set the session's inactive interval
- //
-  session.setMaxInactiveInterval(1800); // 30 minutes
-  shoppingCart_ItemCount+=2;
-   session.setAttribute("count",shoppingCart_ItemCount);
-
-
- //
- // now add the item to the cart
- //
- synchronized(session)  // lock the session
- {
-
-    cart.add(item); // cart uses ArrayList which is not thread safe so we locked
-    cart.display(out); // tell the cart to send its contents to the browser
-  }
- %>
 
 
 
@@ -158,20 +134,17 @@ System.out.println("Creating statement...");
 
 
 
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div style="margin-top:50px;"></div>
 
 
 <jsp:include page="includes/footer.html"/>
-
-
-
-
-
-
-
-
-
-
-
 
     </body>
 </html>

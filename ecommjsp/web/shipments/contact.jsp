@@ -15,3 +15,5 @@
         <h1>Hello From contact</h1>
     </body>
 </html>
+<%out.println("<a class='btn btn-success btn-block add' href='index.jsp?id="+rs.getString(1)+"&name="+name+"&quantity=1&price="+price+
+             "'>Add to cart</a>");%>

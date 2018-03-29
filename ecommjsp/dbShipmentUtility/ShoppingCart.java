@@ -21,7 +21,7 @@ public class ShoppingCart {
        {
 
        }
-       
+
    public void empty()
      {
        itemlist.clear();
@@ -71,9 +71,24 @@ public class ShoppingCart {
       //
       // start the table and output the header row
       //
-      out.println("<h3>Cart contents</h3>");
-      out.println("<table border=1>");
-      out.println("<tr><th>ID</th><th>Name</th><th>Price</th><th>Quantity</th><th>Total</th></tr>");
+    out.println("<div class='container mb-4'>");
+    out.println("<div class='row'>");
+        out.println("<div class='col-12'>");
+        out.println("<div class='table-responsive'>");
+        out.println("<table class='table table-striped'>");
+
+      out.println("<thead>");
+      out.println("<tr>");
+      out.println("<th scope='col'> </th>");
+      out.println("<th scope='col'>Name</th>");
+      out.println("<th scope='col'>Quantity</th>");
+      out.println("<th scope='col' class='text-left'>Price</th>");
+      out.println("<th> </th>");
+      out.println("</tr>");
+      out.println("</thead>");
+      out.println("<tbody>");
+
+
 
       double total = 0;
       //
@@ -82,25 +97,55 @@ public class ShoppingCart {
       for(int i = 0; i < itemlist.size(); i++)
       {
        Item item = (Item)itemlist.get(i);
-       out.println("<tr><td>"+item.id+"</td>"+
+       out.println(
+                  "<td>"+"<img src='https://dummyimage.com/50x50/55595c/fff'/>"+"</td>"+
                   "<td>"+item.name+"</td>"+
-                  "<td align=right>"+ currency.format(item.price)+"</td>"+
-                  "<td align=right>"+ item.quantity+"</td>"+
-                  "<td align=right>"+ currency.format(item.price*item.quantity)+"</td>"+
-                  "<td align=center><A href='removeItemFromCart.jsp?id="+item.id+"'>remove</A></TD></tr>");
+                  "<td align=left>"+ item.quantity+"</td>"+
+                  "<td align=left>"+ currency.format(item.price)+"</td>"+
+                  "<td align=left>"+ currency.format(item.price*item.quantity)+"</td>"+
+                  "<td class='text-left'><A class='btn btn-sm btn-danger' href='cart.jsp?id="+item.id+"'><i class='fa fa-trash'></i></A></TD></tr>");
        total += item.price*item.quantity;
       }
       //
       // add summary information (total, tax, grand total)
       //
-       out.println("<tr><td colspan = 4>Total purchase</td>");
-       out.println("<td align=right>"+currency.format(total)+"</td></tr>");
-       out.println("<tr><td colspan = 4>Sales tax @6%</td>"+
-                  "<td align=right>"+ currency.format(total*.06)+"</td></tr>");
-       out.println("<tr><td colspan = 4>Amount due</td>"+
-                  "<td align=right>"+ currency.format(total*1.06)+"</td></tr>");
-       out.println("</table>");
-       out.println("<a href='checkOut.jsp'><input type='Button' value='Register'/></A><br/>");
+
+       //out.println("<a href='checkOut.jsp'><input type='Button' value='Register'/></A><br/>");
+out.println("<tr>");
+out.println("<td></td>");
+out.println("<td></td>");
+out.println("<td></td>");
+out.println("<td></td>");
+out.println("<td>Sub-Total</td>");
+out.println("<td class='text-left'>255,90 €</td>");
+out.println("</tr>");
+
+out.println("<tr>");
+out.println("<td></td>");
+out.println("<td></td>");
+out.println("<td></td>");
+out.println("<td></td>");
+out.println("<td>Shipping</td>");
+out.println("<td class='text-left'>6,90 €</td>");
+out.println("</tr>");
+
+out.println("<tr>");
+out.println("<td></td>");
+out.println("<td></td>");
+out.println("<td></td>");
+out.println("<td></td>");
+out.println("<td>"+"<strong>"+"Total"+"</strong>"+"</td>");
+out.println("<td class='text-left'>"+"<strong>"+"346,90 €"+"</strong>"+"</td>");
+out.println("</tr>");
+
+
+
+out.println("</table>");
+  out.println("</tbody>");
+
+
+
+
 
      }
 

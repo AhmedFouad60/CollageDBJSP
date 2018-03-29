@@ -5,6 +5,11 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="dbShipmentUtility.*"%>
+<%@page errorPage = "errorPage.jsp" %>
+<jsp:useBean id="item" class="dbShipmentUtility.Item" scope = "request" />
+<jsp:useBean id="cart" class="dbShipmentUtility.ShoppingCart" scope ="session" />
+<jsp:setProperty name="item" property="*" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,9 +24,50 @@
       <link rel="stylesheet" href="../Design/shipments/css/main.css" />
     </head>
     <body>
-
-
       <jsp:include page="includes/header.html"/>
+
+                      <%
+
+                                session.setMaxInactiveInterval(1800); // make session expire after 30 minutes
+                                //
+                                // Remove the item
+                                String idstr = request.getParameter("id");
+                                try
+                                {
+                                 int id = Integer.parseInt(idstr);
+                                  synchronized(session)  // lock the session
+                                  {
+                                   cart.remove(id);
+                                  }
+                                }
+                                catch(Exception ex)
+                                {
+                                  out.println("Error: "+ ex.toString()+ "<br/>");
+                                }
+                                cart.display(out);
+
+                      %>
+
+
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col mb-2">
+            <div class="row">
+                <div class="col-sm-12  col-md-6">
+                    <a href="index.jsp" class="btn btn-block btn-light">Continue Shopping</a>
+                </div>
+                <div class="col-sm-12 col-md-6 text-right">
+                    <button class="btn btn-lg btn-block btn-success text-uppercase">Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
