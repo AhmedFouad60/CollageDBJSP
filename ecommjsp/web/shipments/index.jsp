@@ -30,6 +30,14 @@
     <body>
 
 <jsp:include page="includes/header.html"/>
+
+<section class="jumbotron text-center">
+    <div class="container">
+        <h1 class="jumbotron-heading">All PRODUCTS</h1>
+        <p class="lead text-muted mb-0">browse all the product in the store And you can search for specific product in the search by name</p>
+    </div>
+</section>
+
 <div class="container">
     <div class="row">
         <div class="col">
@@ -139,7 +147,7 @@ System.out.println("Creating statement...");
  {
 
     cart.add(item); // cart uses ArrayList which is not thread safe so we locked
-    cart.display(out); // tell the cart to send its contents to the browser
+    //cart.display(out); // tell the cart to send its contents to the browser
   }
  %>
 
@@ -159,8 +167,11 @@ System.out.println("Creating statement...");
 
 
 
-
-<jsp:include page="includes/footer.html"/>
+</div>
+</div>
+</div>
+</div>
+ <jsp:include page="includes/footer.html"/>
 
 
 

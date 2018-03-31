@@ -20,6 +20,12 @@
     </head>
     <body>
       <jsp:include page="includes/header.html"/>
+      <section class="jumbotron text-center">
+          <div class="container">
+              <h1 class="jumbotron-heading">Product Details</h1>
+              <p class="lead text-muted mb-0">Detailed info about this product  And you can search for specific product in the search by name</p>
+          </div>
+        </section>
       <div class="container">
           <div class="row">
               <div class="col">
