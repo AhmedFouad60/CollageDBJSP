@@ -85,14 +85,18 @@ public double KiloCost(String sourceZone,String destZone,String firstOrAdditiona
 
      prep.setString(1, sourceZone);
      prep.setString(2, destZone);
-     prep.setString(3, "1");
+     prep.setString(3, firstOrAdditional);
   ResultSet rs = prep.executeQuery();
-  BestPrice=Double.parseDouble(rs.getString(3));
+if (rs.next()) {
+BestPrice=Double.parseDouble(rs.getString(5));
+}
   while(rs.next()){
+
+
     //Here i have all the records of all shipping companies' 1'st kilo price
-    NextPrice=Double.parseDouble(rs.getString(3));
-    //if(NextPrice < BestPrice){BestPrice=NextPrice;}
-   //result=rs.getString(3);
+    NextPrice=Double.parseDouble(rs.getString(5));
+    if(NextPrice < BestPrice){BestPrice=NextPrice;}
+     //result=rs.getString(3);
   }
   prep.close();
   con.close();
@@ -104,7 +108,7 @@ public double KiloCost(String sourceZone,String destZone,String firstOrAdditiona
 
 //return the smallest price :)
 //return BestPrice;
-return NextPrice;
+return BestPrice;
 }
 
 
