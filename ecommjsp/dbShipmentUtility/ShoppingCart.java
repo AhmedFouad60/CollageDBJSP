@@ -40,6 +40,7 @@ public class ShoppingCart {
       if(anitem.id == item.id) // already in the cart?
       {
        item.quantity += anitem.quantity; // yes, just update the quantity
+       item.weight+=anitem.weight;//yes ,just  update  the weight
        return;
       }
      }

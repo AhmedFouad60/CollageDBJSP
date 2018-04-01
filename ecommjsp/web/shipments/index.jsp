@@ -106,7 +106,7 @@ System.out.println("Creating statement...");
                                       String price=rs.getString(4);
                                        %>
 
-                                       <%out.println("<a class='btn btn-success btn-block add' href='index.jsp?id="+rs.getString(1)+"&name="+name+"&quantity=1&price="+price+
+                                       <%out.println("<a class='btn btn-success btn-block add' href='index.jsp?id="+rs.getString(1)+"&name="+name+"&quantity=1"+"&weight="+rs.getString(6)+"&price="+price+
                                                     "'>Add to cart</a>");%>
                                   </div>
                               </div>

@@ -36,6 +36,7 @@
   String destZone="";
   double firstKiloCost=0;
   double secondKiloCost=0;
+  double shippingCost=0;
 
   if(request.getParameter("address-line1") != null)
              AddressSource = request.getParameter("address-line1");
@@ -52,6 +53,12 @@ out.println("<div class='btn btn-success'>"+destZone+"</div>");
                  secondKiloCost=shipping.KiloCost(sourceZone,destZone,"0");
                  out.println("<div class='btn btn-success'>"+firstKiloCost+"</div>");
                  out.println("<div class='btn btn-success'>"+secondKiloCost+"</div>");
+
+
+//calculate the shipping cost
+shippingCost=shipping.costCalculation(firstKiloCost,secondKiloCost,cart);
+
+
 
 
 

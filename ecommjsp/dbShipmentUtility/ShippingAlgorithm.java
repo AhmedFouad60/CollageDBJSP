@@ -9,6 +9,7 @@
  import java.util.ArrayList;
  import javax.servlet.jsp.JspWriter;
  import java.sql.*;
+ import dbShipmentUtility.ShoppingCart;
 /**
  *
  * @author foush
@@ -113,9 +114,29 @@ return BestPrice;
 
 
 
-//public double costCalculation(int firstKiloCost,int secondKiloCost,ArrayList<Item> itemlist){
-  //return the total price =price +shipping cost
-//}
+public double costCalculation(double firstKiloCost,double secondKiloCost,ShoppingCart cart){
+  double total = 0;
+  float Weight=0;
+  //return the total_price =price +shipping cost
+  for(int i = 0; i < cart.itemlist.size(); i++)
+      {
+       Item item = (Item)cart.itemlist.get(i);
+                  item.id
+                  item.name
+
+
+                  Weight=item.weight
+
+
+
+                  currency.format(item.price)
+                  item.quantity
+                  currency.format(item.price*item.quantity)
+
+       total += item.price*item.quantity;
+      }
+  return 0;
+}
 
 
 
