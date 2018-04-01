@@ -26,6 +26,14 @@
     <body>
       <jsp:include page="includes/header.html"/>
 
+      <section class="jumbotron text-center">
+          <div class="container">
+              <h1 class="jumbotron-heading">Your Cart</h1>
+              <p class="lead text-muted mb-0">You Can View your Cart containts Here</p>
+          </div>
+      </section>
+
+
                       <%
 
                                 session.setMaxInactiveInterval(1800); // make session expire after 30 minutes
@@ -34,6 +42,7 @@
                                 String idstr = request.getParameter("id");
                                 try
                                 {
+                                  idstr="0";
                                  int id = Integer.parseInt(idstr);
                                   synchronized(session)  // lock the session
                                   {

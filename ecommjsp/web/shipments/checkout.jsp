@@ -9,6 +9,7 @@
 <%@page import="dbShipmentUtility.*"%>
 <%@page errorPage = "errorPage.jsp" %>
 <jsp:useBean id="item" class="dbShipmentUtility.Item" scope = "request" />
+<jsp:useBean id="shipping" class="dbShipmentUtility.ShippingAlgorithm" scope = "request" />
 <jsp:useBean id="cart" class="dbShipmentUtility.ShoppingCart" scope ="session" />
 <jsp:setProperty name="item" property="*" />
 
@@ -27,6 +28,47 @@
 
   </head>
     <body>
+<%
+
+  String AddressSource= "";
+  String AddressDest= "";
+  String sourceZone=null;
+  String destZone="";
+  double firstKiloCost=0;
+  double secondKiloCost=0;
+
+  if(request.getParameter("address-line1") != null)
+             AddressSource = request.getParameter("address-line1");
+  if(request.getParameter("address-line2") != null)
+            AddressDest = request.getParameter("address-line2");
+
+//from the city , i got the source zone and the destZone
+                 sourceZone=shipping.WhichZone(AddressSource);
+                 destZone=shipping.WhichZone(AddressDest);
+out.println("<div class='btn btn-success'>"+sourceZone+"</div>");
+out.println("<div class='btn btn-success'>"+destZone+"</div>");
+
+                 firstKiloCost=shipping.KiloCost(sourceZone,destZone,"1");
+                 secondKiloCost=shipping.KiloCost(sourceZone,destZone,"0");
+                 out.println("<div class='btn btn-success'>"+firstKiloCost+"</div>");
+                 out.println("<div class='btn btn-success'>"+secondKiloCost+"</div>");
+
+
+
+
+
+
+
+%>
+
+
+
+
+
+
+
+
+
       <jsp:include page="includes/header.html"/>
       <section class="jumbotron text-center">
           <div class="container">
@@ -43,16 +85,24 @@
        //
         session.setMaxInactiveInterval(1800); // 30 minutes
 
+        //
+        // Remove the item
 
-       //
-       // now add the item to the cart
-       //
-       synchronized(session)  // lock the session
-       {
-
-          //cart.add(item); // cart uses ArrayList which is not thread safe so we locked
-          cart.display(out); // tell the cart to send its contents to the browser
+        String idstr = request.getParameter("id");
+        try
+        {
+          idstr="0";
+         int id = Integer.parseInt(idstr);
+          synchronized(session)  // lock the session
+          {
+           cart.remove(id);
+          }
         }
+        catch(Exception ex)
+        {
+          out.println("Error: "+ ex.toString()+ "<br/>");
+        }
+        cart.display(out);
        %>
        <jsp:include page="includes/postalAddressform.html"/>
 
