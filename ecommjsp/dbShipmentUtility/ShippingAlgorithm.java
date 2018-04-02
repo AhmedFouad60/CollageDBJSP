@@ -115,26 +115,36 @@ return BestPrice;
 
 
 public double costCalculation(double firstKiloCost,double secondKiloCost,ShoppingCart cart){
-  double total = 0;
-  float Weight=0;
+//  float total = 0;
+//  float Weight=0;
+//  float itemShippingPrice=0;
+//  float cost=0;
+//  float extraWeight=0;
   //return the total_price =price +shipping cost
-  for(int i = 0; i < cart.itemlist.size(); i++)
-      {
-       Item item = (Item)cart.itemlist.get(i);
-                  item.id
-                  item.name
+//  for(int i = 0; i < cart.itemlist.size(); i++)
+  //    {
+    //   Item item = (Item)cart.itemlist.get(i);
+              //    item.id
+              //    item.name
 
 
-                  Weight=item.weight
+                //  Weight=item.weight
+      //              if(Weight<=1){
+        //              itemShippingPrice=firstKiloCost*item.quantity;
+          //            total+=itemShippingPrice;
+            //        }else{
+              //         extraWeight=Weight-1;
+                //       itemShippingPrice=firstKiloCost+extraWeight*secondKiloCost;
+                  //     total+=itemShippingPrice;
+                    //}
 
 
+                //  currency.format(item.price)
+                //  item.quantity
+                //  currency.format(item.price*item.quantity)
 
-                  currency.format(item.price)
-                  item.quantity
-                  currency.format(item.price*item.quantity)
-
-       total += item.price*item.quantity;
-      }
+       //total += item.price*item.quantity;
+      //}
   return 0;
 }
 

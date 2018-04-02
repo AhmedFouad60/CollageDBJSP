@@ -9,7 +9,8 @@
 <%@page import="dbShipmentUtility.*"%>
 <%@page errorPage = "errorPage.jsp" %>
 <jsp:useBean id="item" class="dbShipmentUtility.Item" scope = "request" />
-<jsp:useBean id="shipping" class="dbShipmentUtility.ShippingAlgorithm" scope = "request" />
+<jsp:useBean id="shipping" class="dbShipmentUtility.ShoppingCart" scope ="request" />
+
 <jsp:useBean id="cart" class="dbShipmentUtility.ShoppingCart" scope ="session" />
 <jsp:setProperty name="item" property="*" />
 
@@ -34,8 +35,8 @@
   String AddressDest= "";
   String sourceZone=null;
   String destZone="";
-  double firstKiloCost=0;
-  double secondKiloCost=0;
+  float firstKiloCost=0;
+  float secondKiloCost=0;
   double shippingCost=0;
 
   if(request.getParameter("address-line1") != null)
@@ -56,7 +57,7 @@ out.println("<div class='btn btn-success'>"+destZone+"</div>");
 
 
 //calculate the shipping cost
-shippingCost=shipping.costCalculation(firstKiloCost,secondKiloCost,cart);
+//shippingCost=shipping.costCalculation(firstKiloCost,secondKiloCost,cart);
 
 
 
@@ -96,20 +97,23 @@ shippingCost=shipping.costCalculation(firstKiloCost,secondKiloCost,cart);
         // Remove the item
 
         String idstr = request.getParameter("id");
+        if (idstr == null) {
+          idstr="0";
+        }
         try
         {
-          idstr="0";
+          
          int id = Integer.parseInt(idstr);
           synchronized(session)  // lock the session
           {
-           cart.remove(id);
+           cart.remove(id,out);
           }
         }
         catch(Exception ex)
         {
           out.println("Error: "+ ex.toString()+ "<br/>");
         }
-        cart.display(out);
+        cart.display(out,firstKiloCost,secondKiloCost);
        %>
        <jsp:include page="includes/postalAddressform.html"/>
 

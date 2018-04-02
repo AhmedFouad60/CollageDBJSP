@@ -40,20 +40,23 @@
                                 //
                                 // Remove the item
                                 String idstr = request.getParameter("id");
+                                  if (idstr == null) {
+                                    idstr="0";
+                                  }
                                 try
                                 {
-                                  idstr="0";
+
                                  int id = Integer.parseInt(idstr);
                                   synchronized(session)  // lock the session
                                   {
-                                   cart.remove(id);
+                                   cart.remove(id,out);
                                   }
                                 }
                                 catch(Exception ex)
                                 {
                                   out.println("Error: "+ ex.toString()+ "<br/>");
                                 }
-                                cart.display(out);
+                                cart.display(out,0,0);
 
                       %>
 
