@@ -315,12 +315,65 @@ public float costCalculation(float firstKiloCost,float secondKiloCost,float weig
   return total;
 }
 
+//pagination
+public static ArrayList<Item> getRecords(int start,int total){
+       ArrayList<Item> list=new ArrayList<Item>();
+       try{
+         // JDBC driver name and database URL
+          String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+          String DB_URL = "jdbc:mysql://localhost/Ecommerce";
+         //  Database credentials
+          final String USER = "root";
+          final String PASS = "";
+
+       // open a connection
+         Connection con = null;
+         Class.forName("com.mysql.jdbc.Driver");  // load the driver
+         con = DriverManager.getConnection(DB_URL,USER,PASS);
+
+           PreparedStatement ps=con.prepareStatement("select * from product limit "+(start-1)+","+total);
+           ResultSet rs=ps.executeQuery();
+           while(rs.next()){
+               Item e=new Item();
+
+               e.setId(rs.getInt(1));
+               e.setName(rs.getString(2));
+              // e.setQuantity(rs.getString(3));
+              // e.setPrice(rs.getString(4));
+              // e.setWeight(rs.getString(5));
+               list.add(e);
+           }
+           con.close();
+       }catch(Exception e){System.out.println(e);}
+       return list;
+   }
 
 
+//get number of rows in the table
+
+   public float num() throws Exception {
+     try{
+       // JDBC driver name and database URL
+        String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+        String DB_URL = "jdbc:mysql://localhost/Ecommerce";
+       //  Database credentials
+        final String USER = "root";
+        final String PASS = "";
+
+     // open a connection
+       Connection con = null;
+       Class.forName("com.mysql.jdbc.Driver");  // load the driver
+       con = DriverManager.getConnection(DB_URL,USER,PASS);
+       PreparedStatement prep = con.prepareStatement("select count(*) from products_t");
+
+       ResultSet rs = prep.executeQuery();
 
 
-
-
-
-
+       while (rs.next()) {
+       return rs.getInt(1);
+         }
+         con.close();
+     }catch(Exception e){System.out.println(e);}
+     return 0;
+}
 }

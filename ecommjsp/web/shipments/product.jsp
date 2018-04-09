@@ -5,21 +5,33 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<%@page import="dbShipmentUtility.*"%>
+<%@page errorPage = "errorPage.jsp" %>
+<jsp:useBean id="item" class="dbShipmentUtility.Item" scope = "request" />
+<jsp:useBean id="cart" class="dbShipmentUtility.ShoppingCart" scope ="session" />
+<jsp:setProperty name="item" property="*" />
+
 <!DOCTYPE html>
 <html>
     <head>
-      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
       <title>product Page</title>
-      <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
-      <link rel="stylesheet" href="../Design/shipments/css/main.css" />
     </head>
     <body>
-      <jsp:include page="includes/header.html"/>
+      <%
+      String productName="";
+      String Quantity="";
+
+      if(request.getParameter("productName") != null){
+          productName = request.getParameter("productName");
+          productName=productName.toLowerCase();
+      }
+      if(request.getParameter("quantity") != null){
+          Quantity = request.getParameter("quantity");
+      }
+
+      %>
+      <jsp:include page="includes/header.jsp"/>
       <section class="jumbotron text-center">
           <div class="container">
               <h1 class="jumbotron-heading">Product Details</h1>
@@ -31,9 +43,8 @@
               <div class="col">
                   <nav aria-label="breadcrumb">
                       <ol class="breadcrumb">
-                          <li class="breadcrumb-item"><a href="#">Home</a></li>
-                          <li class="breadcrumb-item"><a href="category.jsp">Category</a></li>
-                          <li class="breadcrumb-item active" aria-current="page">Product</li>
+                          <li class="breadcrumb-item"><a href="index.jsp">Home</a></li>
+                          <li class="breadcrumb-item active" aria-current="page"><%out.println(""+productName);%></li>
                       </ol>
                   </nav>
               </div>
@@ -53,23 +64,41 @@
                       </div>
                   </div>
               </div>
+<%
+//
+// database work
+//
+try{
+  // JDBC driver name and database URL
+   String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+   String DB_URL = "jdbc:mysql://localhost/Ecommerce";
+  //  Database credentials
+   final String USER = "root";
+   final String PASS = "";
+ // open a connection
+  Connection conn = null;
+  Class.forName("com.mysql.jdbc.Driver");  // load the driver
+  System.out.println("Connecting to database...");
+  conn = DriverManager.getConnection(DB_URL,USER,PASS);
+// create the sql command
+System.out.println("Creating statement...");
+  PreparedStatement prep = conn.prepareStatement("Select * from products_t WHERE product_name=?");
+  prep.setString(1,productName);
 
+  ResultSet rs = prep.executeQuery();
+  // process results one row at a timne
+  while(rs.next())
+  {
+%>
               <!-- Add to cart -->
               <div class="col-12 col-lg-6 add_to_cart_block">
                   <div class="card bg-light mb-3">
                       <div class="card-body">
-                          <p class="price">99.00 $</p>
+                          <%out.println("<p class='price'>"+rs.getString(4)+"$"+"</p>");%>
+
                           <p class="price_discounted">149.90 $</p>
-                          <form method="get" action="cart.html">
-                              <div class="form-group">
-                                  <label for="colors">Color</label>
-                                  <select class="custom-select" id="colors">
-                                      <option selected>Select</option>
-                                      <option value="1">Blue</option>
-                                      <option value="2">Red</option>
-                                      <option value="3">Green</option>
-                                  </select>
-                              </div>
+                          <form method="get" action="?">
+
                               <div class="form-group">
                                   <label>Quantity :</label>
                                   <div class="input-group mb-3">
@@ -86,9 +115,15 @@
                                       </div>
                                   </div>
                               </div>
-                              <a href="cart.html" class="btn btn-success btn-lg btn-block text-uppercase">
-                                  <i class="fa fa-shopping-cart"></i> Add To Cart
-                              </a>
+
+                              <%
+                                    String name =rs.getString(2);
+                                    name = java.net.URLEncoder.encode(name, "UTF-8");  // fix name into a url ok
+                                    String price=rs.getString(4);
+                                     %>
+
+                                     <%out.println("<a class='btn btn-success btn-lg btn-block text-uppercase' href='?id="+rs.getString(1)+"&name="+name+"&quantity="+request.getParameter("quantity")+"&weight="+rs.getString(6)+"&price="+price+
+                                                  "'>Add to cart</a>");%>
                           </form>
                           <div class="product_rassurance">
                               <ul class="list-inline">
@@ -108,7 +143,6 @@
                               <a class="pull-right" href="#reviews">View all reviews</a>
                           </div>
                           <div class="datasheet p-3 mb-2 bg-info text-white">
-                              <a href="" class="text-white"><i class="fa fa-file-text"></i> Download DataSheet</a>
                           </div>
                       </div>
                   </div>
@@ -130,6 +164,21 @@
                       </div>
                   </div>
               </div>
+
+<%
+}
+     prep.close();
+     conn.close();
+    }
+    catch(Exception ex)
+    {
+      out.println("Sorry, the system is unavailable<br/>");
+      out.println(ex.toString()+"<br/>");
+    }
+%>
+
+<%
+%>
 
               <!-- Reviews -->
               <div class="col-12" id="reviews">
@@ -174,6 +223,22 @@
 
 
 
+      <%
+       //
+       // set the session's inactive interval
+       //
+        session.setMaxInactiveInterval(1800); // 30 minutes
+        //shoppingCart_ItemCount+=2;
+        // session.setAttribute("count",shoppingCart_ItemCount);
+       //
+       // now add the item to the cart
+       //
+       synchronized(session)  // lock the session
+       {
+          cart.add(item); // cart uses ArrayList which is not thread safe so we locked
+          //cart.display(out); // tell the cart to send its contents to the browser
+        }
+       %>
 
 
 
@@ -189,5 +254,28 @@
     </div>
   </div>
       <jsp:include page="includes/footer.html"/>
+
+      <script>
+
+  $(document).ready(function(){
+      var quantity = 1;
+
+      $('.quantity-right-plus').click(function(e){
+          e.preventDefault();
+          var quantity = parseInt($('#quantity').val());
+          $('#quantity').val(quantity + 1);
+      });
+
+      $('.quantity-left-minus').click(function(e){
+          e.preventDefault();
+          var quantity = parseInt($('#quantity').val());
+          if(quantity > 1){
+              $('#quantity').val(quantity - 1);
+          }
+      });
+
+  });
+
+      </script>
     </body>
 </html>

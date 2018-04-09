@@ -15,21 +15,12 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-          <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <head>
+      <title>All products</title>
+  </head>
+  <body>
 
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
-        <link rel="stylesheet" href="../Design/shipments/css/main.css" />
-
-    </head>
-    <body>
-
-<jsp:include page="includes/header.html"/>
+<jsp:include page="includes/header.jsp"/>
 
 <section class="jumbotron text-center">
     <div class="container">
@@ -38,13 +29,13 @@
     </div>
 </section>
 
+
 <div class="container">
     <div class="row">
         <div class="col">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item"><a href="#">Category</a></li>
+                    <li class="breadcrumb-item"><a href="?">Home</a></li>
                 </ol>
             </nav>
         </div>
@@ -59,7 +50,6 @@
 <%
 Integer shoppingCart_ItemCount = new Integer(0);
 session.setAttribute("count", shoppingCart_ItemCount);
-
 //
 // database work
 //
@@ -67,7 +57,6 @@ try{
   // JDBC driver name and database URL
    String JDBC_DRIVER = "com.mysql.jdbc.Driver";
    String DB_URL = "jdbc:mysql://localhost/Ecommerce";
-
   //  Database credentials
    final String USER = "root";
    final String PASS = "";
@@ -78,22 +67,23 @@ try{
   conn = DriverManager.getConnection(DB_URL,USER,PASS);
 // create the sql command
 System.out.println("Creating statement...");
-
   PreparedStatement prep = conn.prepareStatement("Select * from products_t");
-
   ResultSet rs = prep.executeQuery();
   // process results one row at a timne
   while(rs.next())
   {
-
-
 %>
+
+
 
                   <div class="col-12 col-md-6 col-lg-4">
                       <div class="card" style="margin-bottom: 20px;">
                           <img class="card-img-top" src="../Design/shipments/images/fff.png" alt="Card image cap">
                           <div class="card-body">
-                          <%out.println("<h4 class='card-title'>"+"<a href='product.jsp' title='View Product'>"+rs.getString(2)+"</a>"+"</h4>");%>
+                          <%out.println("<h4 class='card-title'>");%>
+                          <%out.println("<a href="+"product.jsp?productName="+rs.getString(2)+">"+rs.getString(2)+"</a>");%>
+                          <%out.println("</h4>");%>
+
                           <%out.println("<p>"+rs.getString(3)+"</p>");%>
                               <div class="row">
                                   <div class="col">
@@ -118,7 +108,6 @@ System.out.println("Creating statement...");
 
 
 <%
-
 }
      prep.close();
      conn.close();
@@ -128,7 +117,6 @@ System.out.println("Creating statement...");
       out.println("Sorry, the system is unavailable<br/>");
       out.println(ex.toString()+"<br/>");
     }
-
 %>
 
 <%
@@ -138,14 +126,11 @@ System.out.println("Creating statement...");
   session.setMaxInactiveInterval(1800); // 30 minutes
   shoppingCart_ItemCount+=2;
    session.setAttribute("count",shoppingCart_ItemCount);
-
-
  //
  // now add the item to the cart
  //
  synchronized(session)  // lock the session
  {
-
     cart.add(item); // cart uses ArrayList which is not thread safe so we locked
     //cart.display(out); // tell the cart to send its contents to the browser
   }

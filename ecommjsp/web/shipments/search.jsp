@@ -6,24 +6,23 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.sql.*"%>
+<%@page import="dbShipmentUtility.*"%>
+<%@page errorPage = "errorPage.jsp" %>
+<jsp:useBean id="item" class="dbShipmentUtility.Item" scope = "request" />
+<jsp:useBean id="cart" class="dbShipmentUtility.ShoppingCart" scope ="session" />
+<jsp:setProperty name="item" property="*" />
+
 
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-          <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <title>Search Page</title>
 
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-
-        <link rel="stylesheet" href="../Design/shipments/css/main.css" />
 
     </head>
     <body>
 
-<jsp:include page="includes/header.html"/>
+<jsp:include page="includes/header.jsp"/>
 <div class="container">
     <div class="row">
         <div class="col">
@@ -93,7 +92,14 @@ ResultSet rs = prep.executeQuery();
                                   <%out.println("<p class='btn btn-danger btn-block'>"+rs.getString(4)+"$"+"</p>");%>
                                   </div>
                                   <div class="col">
-                                      <a href="#" class="btn btn-success btn-block">Add to cart</a>
+                                  <%
+                                        String name =rs.getString(2);
+                                        name = java.net.URLEncoder.encode(name, "UTF-8");  // fix name into a url ok
+                                        String price=rs.getString(4);
+                                         %>
+
+                                         <%out.println("<a class='btn btn-success btn-block add' href='?id="+rs.getString(1)+"&name="+name+"&quantity=1"+"&weight="+rs.getString(6)+"&price="+price+
+                                                      "'>Add to cart</a>");%>
 
                                   </div>
                               </div>
@@ -119,7 +125,22 @@ ResultSet rs = prep.executeQuery();
 %>
 
 
-
+<%
+ //
+ // set the session's inactive interval
+ //
+  session.setMaxInactiveInterval(1800); // 30 minutes
+  //shoppingCart_ItemCount+=2;
+  // session.setAttribute("count",shoppingCart_ItemCount);
+ //
+ // now add the item to the cart
+ //
+ synchronized(session)  // lock the session
+ {
+    cart.add(item); // cart uses ArrayList which is not thread safe so we locked
+    //cart.display(out); // tell the cart to send its contents to the browser
+  }
+ %>
 
 
 
