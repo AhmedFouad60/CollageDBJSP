@@ -58,7 +58,7 @@
                   <div class="card bg-light mb-3">
                       <div class="card-body">
                           <a href="" data-toggle="modal" data-target="#productModal">
-                              <img class="img-fluid" src="https://dummyimage.com/800x800/55595c/fff" />
+                              <img class="img-fluid" src="../Design/shipments/images/largepic.png" />
                               <p class="text-center">Zoom</p>
                           </a>
                       </div>
@@ -97,6 +97,8 @@ System.out.println("Creating statement...");
                           <%out.println("<p class='price'>"+rs.getString(4)+"$"+"</p>");%>
 
                           <p class="price_discounted">149.90 $</p>
+
+
                           <form method="get" action="?">
 
                               <div class="form-group">
@@ -108,6 +110,15 @@ System.out.println("Creating statement...");
                                           </button>
                                       </div>
                                       <input type="text" class="form-control"  id="quantity" name="quantity" min="1" max="100" value="1">
+                                      <input type="hidden" name="id" value="<%out.print(rs.getString(1));%>">
+                                      <input type="hidden" name="price" value="<%out.print(rs.getString(4));%>">
+                                      <input type="hidden" name="name" value="<%out.print(rs.getString(2));%>">
+                                      <input type="hidden" name="weight" value="<%out.print(rs.getString(6));%>">
+                                      <input type="hidden" name="productName" value="<%out.print(rs.getString(2));%>">
+
+
+
+
                                       <div class="input-group-append">
                                           <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
                                               <i class="fa fa-plus"></i>
@@ -116,14 +127,10 @@ System.out.println("Creating statement...");
                                   </div>
                               </div>
 
-                              <%
-                                    String name =rs.getString(2);
-                                    name = java.net.URLEncoder.encode(name, "UTF-8");  // fix name into a url ok
-                                    String price=rs.getString(4);
-                                     %>
+                                     <button class="btn btn-success btn-lg btn-block text-uppercase" onclick='location.href="cart.jsp?quantity="+<%out.print(request.getParameter("quantity"));%>+"&id="+<%out.print(request.getParameter("id"));%>+"price="+<%out.print(request.getParameter("price"));%>+"&name="+<%out.print(request.getParameter("name"));%>+"&weight="+<%out.print(request.getParameter("weight"));%>"' type="submit">
+                                          Add to cart</button>
 
-                                     <%out.println("<a class='btn btn-success btn-lg btn-block text-uppercase' href='?id="+rs.getString(1)+"&name="+name+"&quantity="+request.getParameter("quantity")+"&weight="+rs.getString(6)+"&price="+price+
-                                                  "'>Add to cart</a>");%>
+
                           </form>
                           <div class="product_rassurance">
                               <ul class="list-inline">
@@ -155,12 +162,15 @@ System.out.println("Creating statement...");
                   <div class="card border-light mb-3">
                       <div class="card-header bg-primary text-white text-uppercase"><i class="fa fa-align-justify"></i> Description</div>
                       <div class="card-body">
-                          <p class="card-text">
-                              Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un peintre anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.
-                          </p>
-                          <p class="card-text">
-                              Contrairement à une opinion répandue, le Lorem Ipsum n'est pas simplement du texte aléatoire. Il trouve ses racines dans une oeuvre de la littérature latine classique datant de 45 av. J.-C., le rendant vieux de 2000 ans. Un professeur du Hampden-Sydney College, en Virginie, s'est intéressé à un des mots latins les plus obscurs, consectetur, extrait d'un passage du Lorem Ipsum, et en étudiant tous les usages de ce mot dans la littérature classique, découvrit la source incontestable du Lorem Ipsum. Il provient en fait des sections 1.10.32 et 1.10.33 du "De Finibus Bonorum et Malorum" (Des Suprêmes Biens et des Suprêmes Maux) de Cicéron. Cet ouvrage, très populaire pendant la Renaissance, est un traité sur la théorie de l'éthique. Les premières lignes du Lorem Ipsum, "Lorem ipsum dolor sit amet...", proviennent de la section 1.10.32.
-                          </p>
+                      <!-- Small Description -->
+
+                                <%out.println("<p class='card-text'>"+rs.getString(3)+"</p>");%>
+
+                          <!-- Large Description -->
+                          <%out.println("<p class='card-text'>"+rs.getString(10)+"</p>");%>
+
+
+
                       </div>
                   </div>
               </div>

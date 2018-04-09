@@ -349,6 +349,8 @@ public static ArrayList<Item> getRecords(int start,int total){
    }
 
 
+/** pagination******/
+/*
 //get number of rows in the table
 
    public float num() throws Exception {
@@ -376,4 +378,5 @@ public static ArrayList<Item> getRecords(int start,int total){
      }catch(Exception e){System.out.println(e);}
      return 0;
 }
+*/
 }

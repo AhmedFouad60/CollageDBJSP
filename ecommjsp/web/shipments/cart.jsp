@@ -76,8 +76,24 @@
 
 
 
+<%
+ //
+ // set the session's inactive interval
+ //
+  session.setMaxInactiveInterval(1800); // 30 minutes
+  //shoppingCart_ItemCount+=2;
+   //session.setAttribute("count",shoppingCart_ItemCount);
+ //
+ // now add the item to the cart
+ //
+ synchronized(session)  // lock the session
+ {
+    cart.add(item); // cart uses ArrayList which is not thread safe so we locked
 
+    //cart.display(out); // tell the cart to send its contents to the browser
 
+  }
+ %>
 
 
 
