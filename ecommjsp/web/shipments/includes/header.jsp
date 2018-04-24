@@ -14,6 +14,7 @@ String pageName = uri.substring(uri.lastIndexOf("/")+1);
     <link rel="stylesheet" href="../Design/shipments/css/main.css" />
 
 </head>
+
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="index.html">Simple Ecommerce</a>
