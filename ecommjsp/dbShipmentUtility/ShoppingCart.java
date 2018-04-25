@@ -165,8 +165,7 @@ out.println("</table>");
              int result = 0; // tally the classes added
              Timestamp now = new Timestamp(new Date().getTime());
              int lastInsertedID=0;
-             int paymentID=1;
-             int receipt_id=1;
+             int paymentID=0;
 
              try{
                out.println("ok");
@@ -220,12 +219,14 @@ String sql="INSERT INTO orders_t (order_date) VALUES (?);"+
              PreparedStatement prep3 = conn.prepareStatement(sql3);
              // prep3.setInt(1,lastInsertedID);
              // prep3.executeUpdate();
+             prep3.setInt(1,lastInsertedID);
+
 
 
              for(int i = 0; i < itemlist.size(); i++)
              {
                 Item item = itemlist.get(i);
-                prep3.setInt(1,lastInsertedID);
+                // prep3.setInt(1,lastInsertedID);
                 prep3.setInt(2, item.id);
                 result += prep3.executeUpdate();
              }
@@ -234,30 +235,30 @@ String sql="INSERT INTO orders_t (order_date) VALUES (?);"+
              // ************************Insert paymentMethod***************************
 
 //payment_mehtod_id => Make if auto increment later  ...now just test it
-             String sql4="INSERT INTO payment_mehtod_t (payment_mehtod_id,payment_mehtod_name) VALUES (?,?)";
-             PreparedStatement prep4 = conn.prepareStatement(sql4);
-             prep4.setInt(1,paymentID);
-             prep4.setString(2, paymentMethod);
+             String sql4="INSERT INTO payment_mehtod_t (payment_mehtod_name) VALUES (?)";
+             PreparedStatement prep4 = conn.prepareStatement(sql4,Statement.RETURN_GENERATED_KEYS);
+
+             prep4.setString(1, paymentMethod);
              prep4.executeUpdate();
+             ResultSet rs2 = prep.getGeneratedKeys();
+             if (rs2.next()){
+                 paymentID=rs2.getInt(1);
+             }
 
 
              // ************************Insert receipt***************************
 
 //total price here ..hardcoded till i get some sleep and fix it
 
-             String sql5="INSERT INTO receipt_t (receipt_id,receipt_totalprice,orders_t_idorder_id,payment_mehtod_t_payment_mehtod_id) VALUES (?,?,?,?)";
+             String sql5="INSERT INTO receipt_t (orders_t_idorder_id,receipt_totalprice,payment_mehtod_t_payment_mehtod_id) VALUES (?,?,?)";
              PreparedStatement prep5 = conn.prepareStatement(sql5);
-             prep5.setInt(1,receipt_id);
-             prep5.setString(2, '50');
-             prep5.setInt(3,lastInsertedID);
-             prep5.setInt(4,paymentID);
+
+             prep5.setInt(1,lastInsertedID);
+             prep5.setString(2,"50");
+             prep5.setInt(3,paymentID);
+
 
              prep5.executeUpdate();
-             paymentID +=1;
-             receipt_id +=1;
-
-
-
 
 
 
