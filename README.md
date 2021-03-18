@@ -2,10 +2,10 @@
 
 - [X]  Business Rules.
 - [X]  EER.
-- [ ]  Branches.
-- [ ]  Emplyees.
-- [ ]  Products.
-- [ ]  Customers.
-- [ ]  Orders.
-- [ ]  Payments.
-- [ ]  Shipments.
+- [X]  Branches.
+- [X]  Emplyees.
+- [X]  Products.
+- [X]  Customers.
+- [X]  Orders.
+- [X]  Payments.
+- [X]  Shipments.
